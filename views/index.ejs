@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Chats</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h2 style="color : #595959">All Chats!</h2>
+    <form method="GET" action="/chats/new">
+        <button style="background-color : #595959 ; color:aliceblue">
+            New Chat
+        </button>
+    </form>
+    <br>
+   <% for (let chat of chats){ %>
+        <div class="chat">
+            <p>From :<b> <%= chat.from %></b></p>
+            <div class="msg">
+                <p> Message : <%= chat.msg %></p>
+            </div>
+            <p>Received By : <b><%= chat.to %></b> </p>
+        </div>
+ <%   }  %>
+
+    </body>
+</body>
+</html>
