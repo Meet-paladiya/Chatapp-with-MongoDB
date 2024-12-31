@@ -19,6 +19,7 @@ const chatSchema = new mongoose.Schema({
         required:true,
         default: Date.now,
     }
+    //updated_at also here
 });
 
 const Chat = mongoose.model("Chat",chatSchema);

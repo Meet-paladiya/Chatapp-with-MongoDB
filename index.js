@@ -5,12 +5,14 @@ const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
 const path = require("path");
-
 const Chat = require("./models/chat.js");
+const methodOverride = require("method-override");
 
 app.set("views", path.join(__dirname,"views")); //setting views directory
 app.set("view engine", "ejs"); //setting view engine as ejs
 app.use(express.static(path.join(__dirname,"public"))); //setting public directory as static directory
+app.use(express.urlencoded({extended : true}));
+app.use(methodOverride("_method"));
 
 main().then(() => { //async function
     console.log("connection succesfull") //if connection is succesfull
@@ -33,17 +35,66 @@ app.get("/chats/new", (req,res) => {
     res.render("new.ejs");
 })
 
-let chat1 = new Chat({
-    from: "meet",
-    to: "mox",
-    msg : "good morning",
-    created_at : new Date(),
-})
+//Create Route  // permanent chat add thai km k database ma store thay aetle
+app.post("/chats",(req,res) => {
+    let {from,to,msg} = req.body;
+    let newChat = new Chat({
+        from : from,
+        to : to,
+        msg : msg,
+        created_at : new Date(),
+    });
+    newChat
+    .save()
+    .then(res => {console.log("chat is saved")}) // then use karie to await no use karie to chale
+    .catch(err => {console.log("Error!")});
+    
+    res.redirect("/chats");
+});
 
-chat1.save() //UTC time
-.then((res) => {
-    console.log(res)
-})
+//Edit Route
+app.get("/chats/:id/edit",async(req,res) => {
+    let {id} = req.params;
+    let chat = await Chat.findById(id);
+    res.render("edit.ejs",{chat});
+});
+
+//Update Route
+app.put("/chats/:id",async (req,res) => {
+    let {id} = req.params;
+    let { msg : newMsg} =  req.body;
+    console.log(newMsg);
+    let updatedChat = await Chat.findByIdAndUpdate(id,
+        {msg:newMsg},
+        {runValidators:true,new:true});
+        console.log(updatedChat);
+        res.redirect("/chats");
+    });
+
+
+//Destroy Route
+app.delete("/chats/:id", async (req, res) => {
+    let { id } = req.params;
+    try {
+        let deletedchat = await Chat.findByIdAndDelete(id);
+        console.log(deletedchat);
+        res.redirect("/chats");
+    } catch (err) {
+        console.error("Error deleting chat", err);
+        res.redirect("/chats");
+    }
+});
+// let chat1 = new Chat({
+//     from: "meet",
+//     to: "mox",
+//     msg : "good morning",
+//     created_at : new Date(),
+// })
+
+// chat1.save() //UTC time
+// .then((res) => {
+//     console.log(res)
+// })
 
 app.listen(8080, () => {
     console.log("Server is running on port 8080");
