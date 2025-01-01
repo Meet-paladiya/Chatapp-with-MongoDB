@@ -5,8 +5,8 @@ const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
 const path = require("path");
-const Chat = require("./models/chat.js");
-const methodOverride = require("method-override");
+const Chat = require("./models/chat.js"); //importing chat.js for getting the schema(Chat)
+const methodOverride = require("method-override"); //
 
 app.set("views", path.join(__dirname,"views")); //setting views directory
 app.set("view engine", "ejs"); //setting view engine as ejs
@@ -24,18 +24,19 @@ async function main() {
     }
 
     //Index Route
-app.get("/chats", async (req,res) => { 
+app.get("/chats", async (req,res) => {  
     let chats = await Chat.find(); //find all chats
     console.log(chats); //print all chats
     res.render("index.ejs", {chats}); //render index.ejs
 })
 
-//new route 
+//new chat add karvan mate
+//new route  //ayya thi new.ejs ma jay che
 app.get("/chats/new", (req,res) => {
     res.render("new.ejs");
 })
 
-//Create Route  // permanent chat add thai km k database ma store thay aetle
+//Create Route  // permanent chat add thai km k database ma store thay aetle // new.ejs ma call hovathi (action="/chats" method="POST") app.post thi data store thay
 app.post("/chats",(req,res) => {
     let {from,to,msg} = req.body;
     let newChat = new Chat({
@@ -60,11 +61,12 @@ app.get("/chats/:id/edit",async(req,res) => {
 });
 
 //Update Route
+/*edit.ejs ma che aa code km k html form ma get and post use na thai sake so method-override no use karyo che <form method="POST" action="/chats/<%= chat._id %>?_method=PUT"> */
 app.put("/chats/:id",async (req,res) => {
-    let {id} = req.params;
-    let { msg : newMsg} =  req.body;
+    let {id} = req.params; 
+    let { msg : newMsg} =  req.body; //destructuring
     console.log(newMsg);
-    let updatedChat = await Chat.findByIdAndUpdate(id,
+    let updatedChat = await Chat.findByIdAndUpdate(id, //find chat by id and update it
         {msg:newMsg},
         {runValidators:true,new:true});
         console.log(updatedChat);

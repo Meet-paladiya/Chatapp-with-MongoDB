@@ -11,6 +11,8 @@
     </p>
     <p>This chat was sent from <b><%= chat.from %></b> to <b><%= chat.to %></b></p>
 
+    <!-- HTML forms do not support PUT or DELETE methods directly, we use a technique called method overriding to simulate these HTTP methods. -->
+    <!-- To use PUT or DELETE methods, we use a query parameter (?_method=PUT) along with the method-override middleware in Express. -->
     <form method="POST" action="/chats/<%= chat._id %>?_method=PUT">
         <textarea name="msg" rows="6" cols="50"><%= chat.msg %></textarea>
         <br>

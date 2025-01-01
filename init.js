@@ -1,4 +1,4 @@
-// this file is uses to get the sample data in the database
+// this file is uses to get the sample data in the database.  to run this write node init.js in terminal
 
 const mongoose = require("mongoose");
 

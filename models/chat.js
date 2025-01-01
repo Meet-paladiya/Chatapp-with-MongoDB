@@ -1,7 +1,7 @@
 
 const mongoose = require("mongoose");
 
-const chatSchema = new mongoose.Schema({
+const chatSchema = new mongoose.Schema({ //schema is a blueprint of the collection
     from : {
         type : String,
         required : true
@@ -22,6 +22,6 @@ const chatSchema = new mongoose.Schema({
     //updated_at also here
 });
 
-const Chat = mongoose.model("Chat",chatSchema);
+const Chat = mongoose.model("Chat",chatSchema); //Chat is the name of the collection
 
-module.exports = Chat;
+module.exports = Chat; //exporting Chat
